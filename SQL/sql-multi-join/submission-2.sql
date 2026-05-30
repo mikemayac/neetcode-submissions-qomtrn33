@@ -1,50 +1,55 @@
-CREATE TABLE pokemon_types (
+CREATE TABLE teams (
     id INTEGER PRIMARY KEY,
-    name TEXT,
-    weakness TEXT
+    name TEXT NOT NULL
 );
 
-CREATE TABLE pokemon (
+CREATE TABLE players (
     id INTEGER PRIMARY KEY,
-    name TEXT,
-    type_id INTEGER
+    name TEXT NOT NULL,
+    team_id INTEGER REFERENCES teams(id)
 );
 
-INSERT INTO pokemon_types (id, name, weakness) VALUES
-(1, 'Fire', 'Water'),
-(2, 'Water', 'Grass'),
-(3, 'Grass', 'Fire'),
-(4, 'Electric', 'Ground');
+CREATE TABLE contracts (
+    id INTEGER PRIMARY KEY,
+    player_id INTEGER REFERENCES players(id),
+    salary INTEGER
+);
 
-INSERT INTO pokemon (id, name, type_id) VALUES
-(4, 'Charmander', 1),
-(7, 'Squirtle', 2),
-(3, 'Bulbasaur', 3),
-(147, 'Dratini', 6),
-(65, 'Alakazam', 7);
+INSERT INTO teams (id, name) VALUES
+  (1, 'Lakers'),
+  (2, 'Celtics'),
+  (3, 'Bucks');
+
+INSERT INTO players (id, name, team_id) VALUES
+  (1, 'LeBron James', 1),
+  (2, 'Anthony Davis', 1),
+  (3, 'Kobe Bryant', 1),
+  (4, 'Magic Johnson', 1),
+  (5, 'Larry Bird', 2),
+  (6, 'Kevin Garnett', 2),
+  (7, 'Paul Pierce', 2),
+  (8, 'Giannis Antetokounmpo', 3),
+  (9, 'Khris Middleton', 3),
+  (10, 'Jrue Holiday', 3);
+
+INSERT INTO contracts (id, player_id, salary) VALUES
+  (1, 1, 30000000),
+  (2, 2, 25000000),
+  (3, 3, 35000000),
+  (4, 4, 15000000),
+  (5, 5, 40000000),
+  (6, 6, 19000000),
+  (7, 7, 60000000),
+  (8, 8, 27000000),
+  (9, 9, 20000000),
+  (10, 10, 25000000);
 -- Do not modify above this line. --
 
-SELECT pokemon_types.name AS type , pokemon.name AS pokemon, pokemon_types.weakness 
-FROM pokemon_types 
-    FULL JOIN pokemon ON pokemon_types.id = pokemon.type_id
-ORDER BY type;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SELECT players.name AS player_name , teams.name AS team_name , contracts.salary
+FROM teams
+  JOIN players ON teams.id = players.team_id
+  JOIN contracts ON players.id = contracts.player_id
+ORDER BY contracts.salary DESC;
 
 
 
